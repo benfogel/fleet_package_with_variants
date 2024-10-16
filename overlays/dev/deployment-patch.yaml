@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-variant-deployment
+  namespace: default
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        color: blue

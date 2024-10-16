@@ -1,0 +1,12 @@
+name: "projects/$PROJECT/locations/$REGION/fleetPackages/$PACKAGE_NAME_AND_TARGET"
+resourceBundleSelector:
+  cloudBuildRepository:
+    name: "projects/$PROJECT/locations/$REGION/connections/github/repositories/$REPO_NAME"
+    tag: "$TAG" # to be injected by automation
+    serviceAccount: "projects/$PROJECT/serviceAccounts/$SERVICE_ACCOUNT@$PROJECT.iam.gserviceaccount.com"
+    variantsPattern: "pkg-*.yaml"
+    path: package/
+target: {} # to be injected by automation
+rolloutStrategy: {} # to be injected by automation
+# variantSelector:
+#   variantNameTemplate: "${membership.labels['cluster_group']}"
