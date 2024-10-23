@@ -9,3 +9,4 @@ spec:
     metadata:
       labels:
         color: blue
+        demo: hi

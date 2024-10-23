@@ -18,6 +18,7 @@ spec:
       labels:
         app: nginx-variant
         color: green
+        demo: hi
     spec:
       containers:
       - image: nginx:1.14.2
