@@ -18,6 +18,7 @@ spec:
       labels:
         app: nginx-variant
         color: blue
+        customlabel: hi
         demo: hi
     spec:
       containers:
