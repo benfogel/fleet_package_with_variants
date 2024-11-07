@@ -1,0 +1,19 @@
+name: run full hydration pipeline
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+run-name: run-full-hydration-pipeline
+permissions: write-all
+
+jobs:
+  hydration-pipline-full:
+    uses: Enzyme3/demo-edge-hydration-workflows/.github/workflows/hydration_pipeline.yaml@main
+    with:
+      docker_credential_gcr_version: v2.1.22
+      hydrator_image: us-docker.pkg.dev/kwpark1-test-123/mcd-tools/hydrator:latest
+      run_full_pipeline: true
+      service_account: github-wif@kwpark1-test-123.iam.gserviceaccount.com
+      sot_validator_image: us-docker.pkg.dev/kwpark1-test-123/mcd-tools/csv-validator:latest
+      used_workflow_ref: Enzyme3/demo-edge-hydration-workflows/.github/workflows/hydration_pipeline.yaml@main
+      workload_identity_provider: projects/789864185540/locations/global/workloadIdentityPools/github-pool-a9134ad2/providers/github-pool-provider-a9134ad2
+    secrets: inherit

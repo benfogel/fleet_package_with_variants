@@ -1,0 +1,12 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredAnnotations
+metadata:
+  name: validate-cluster-group-annotation
+  namespace: gator-local
+spec:
+  match:
+    excludedNamespaces: ["gator-local"]
+  parameters:
+    annotations:
+    - key: cluster-group
+      allowedRegex: ^global-dev-sg$

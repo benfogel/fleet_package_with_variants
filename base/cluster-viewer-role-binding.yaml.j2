@@ -1,0 +1,43 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cluster-viewer-role
+  labels:
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
+rules:
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get", "watch", "list"]
+- apiGroups: ["manage.robin.io"]
+  resources: ["robinclusters"]
+  verbs: ["get", "watch", "list"]
+- apiGroups: ["apiextensions.k8s.io"]
+  resources: ["customresourcedefinitions"]
+  verbs: ["get", "list"]
+- apiGroups: ["configmanagement.gke.io"]
+  resources: ["configmanagements"]
+  verbs: ["get", "list"]
+- apiGroups: ["configsync.gke.io"]
+  resources: ["rootsyncs", "reposyncs"]
+  verbs: ["get", "list"]
+- apiGroups: ["kpt.dev"]
+  resources: ["resourcegroups"]
+  verbs: ["get", "list"]
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list"]
+- apiGroups: ["anthos.cloud.google.com"]
+  resources: ["canonicalservices"]
+  verbs: ["get", "list"]
+- apiGroups: ["networking.istio.io"]
+  resources: ["virtualservices"]
+  verbs: ["get", "list"]
+- apiGroups: [""]
+  resources: ["nodes", "persistentvolumes", "pods", "services", "deployments"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["storage.k8s.io"]
+  resources: ["storageclasses"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["external-secrets.io"]
+  resources: ["externalsecret", "clustersecretstore", "secretstore"]
+  verbs: ["get", "list", "watch"]

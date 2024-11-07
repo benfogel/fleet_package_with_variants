@@ -1,0 +1,15 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredAnnotations
+metadata:
+  name: all-resource-required-annotations
+  namespace: gator-local
+spec:
+  match:
+    excludedNamespaces: ["gator-local"]
+  parameters:
+    annotations:
+    - key: client.lifecycle.config.k8s.io/deletion
+      allowedRegex: ^detach$
+    - key: configsync.gke.io/cluster-name-selector
+    - key: cluster-group
+    - key: managing-repo

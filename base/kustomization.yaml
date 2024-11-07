@@ -1,7 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 metadata:
-  name: nginx-package
+  name: roles-package
 
 resources:
-- nginx.yaml
+- cluster-viewer-role.yaml
+- cluster-viewer-role-binding.yaml
