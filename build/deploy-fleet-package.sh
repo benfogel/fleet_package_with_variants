@@ -1,7 +1,9 @@
 #!/bin/bash
 set +x
 
+# Usage ./deploy-fleet-packages.sh v1.2.3 pipeline-env.yaml
 export TAG=$1
+export PIPELINE_FILE=$2
 
 git tag $TAG
 git push origin --tags
@@ -46,7 +48,7 @@ function main() {
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-PIPELINE_FILE="$SCRIPT_DIR/pipeline.yaml"
+PIPELINE_FILE="$SCRIPT_DIR/$2"
 
 function get_number_of_rollouts() {
     cat $PIPELINE_FILE | yq '.rollout_sequence | length'

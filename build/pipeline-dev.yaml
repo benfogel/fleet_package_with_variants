@@ -1,0 +1,18 @@
+package_name: variants
+defaults:
+  repo_name: benfogel-fleet_package_with_variants
+  service_account: fp-publisher
+  region : us-central1
+  rolloutStrategy:
+    rolling:
+      maxConcurrent: 1
+  variantSelector:
+    variantNameTemplate: "${membership.labels['storetype']}"
+rollout_sequence:
+- targets:
+  - target-dev1
+
+targets:
+  target-dev1:
+    fleet: 
+      project: "projects/fp-demo-dev1"

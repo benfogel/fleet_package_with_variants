@@ -10,8 +10,6 @@ defaults:
     variantNameTemplate: "${membership.labels['storetype']}"
 rollout_sequence:
 - targets:
-  - target-dev1
-- targets:
   - target-canary1
   - target-canary2
 - targets:
@@ -19,9 +17,6 @@ rollout_sequence:
   - target-prod2
 
 targets:
-  target-dev1:
-    fleet: 
-      project: "projects/fp-demo-dev1"
   target-canary1:
     fleet:
       project: "projects/fp-demo-prod1"
