@@ -1,7 +1,9 @@
 #!/bin/bash
 set +x
 
+# Usage: ./deploy-fleet-package.sh v1.2.3 fp-project-1,fp-project-2
 export TAG=$1
+export PROJECT_FITLERS="[$2]"
 
 git tag $TAG
 git push origin --tags
@@ -28,16 +30,19 @@ function main() {
             export TARGET_PROJECT=$(get_target_project $TARGET)
             export PROJECT=${TARGET_PROJECT#*/} # strips `projects/` prefix
             export VARIANT_SELECTOR=$(get_default_property "variantSelector")
-
             
             envsubst < "fleet-package.yaml.template" | 
                 yq ". | .target += $TARGET_INFO
                       | .rolloutStrategy += $ROLLOUT_STRATEGY
                       | .variantSelector += $VARIANT_SELECTOR" -y > "/tmp/$PACKAGE_NAME_AND_TARGET.yaml"
 
-            echo "On subrollout $i $PACKAGE_NAME_AND_TARGET"
+            if [[ "$(echo "[$PROJECT_FILTERS]" | yq ". | index(\"$PROJECT\")")" = "null" ]]; then
+                echo "Skipping $i $PACKAGE_NAME_AND_TARGET"
+            else
+                echo "On subrollout $i $PACKAGE_NAME_AND_TARGET"
 
-            start_rollout $PACKAGE_NAME_AND_TARGET &
+                start_rollout $PACKAGE_NAME_AND_TARGET &
+            fi
         done
 
         wait
