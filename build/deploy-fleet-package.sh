@@ -29,15 +29,16 @@ function main() {
             export PROJECT=${TARGET_PROJECT#*/} # strips `projects/` prefix
             export VARIANT_SELECTOR=$(get_default_property "variantSelector")
 
-            
-            envsubst < "fleet-package.yaml.template" | 
+            envsubst < "fleet-package.yaml.template" |
                 yq ". | .target += $TARGET_INFO
                       | .rolloutStrategy += $ROLLOUT_STRATEGY
-                      | .variantSelector += $VARIANT_SELECTOR" -y > "/tmp/$PACKAGE_NAME_AND_TARGET.yaml"
+                      | .variantSelector += $VARIANT_SELECTOR" > "/tmp/$PACKAGE_NAME_AND_TARGET.yaml"
 
             echo "On subrollout $i $PACKAGE_NAME_AND_TARGET"
 
-            start_rollout $PACKAGE_NAME_AND_TARGET &
+            echo $PACKAGE_NAME_AND_TARGET
+
+            #start_rollout $PACKAGE_NAME_AND_TARGET &
         done
 
         wait
@@ -53,19 +54,19 @@ function get_number_of_rollouts() {
 } 
 
 function get_number_of_subrollouts() {
-    cat $PIPELINE_FILE | yq ".rollout_sequence[$1-1].targets | length"
+    cat $PIPELINE_FILE | yq ".rollout_sequence[$(($1-1))].targets | length"
 }
 
 function get_target_from_subrollout() {
-    cat $PIPELINE_FILE | yq ".rollout_sequence[$1-1].targets[$2-1]" -r
+    cat $PIPELINE_FILE | yq ".rollout_sequence[$(($1-1))].targets[$(($2-1))]" -r
 }
 
 function get_target_info() {
-    cat $PIPELINE_FILE | yq ".targets[\"$1\"]" -r
+    cat $PIPELINE_FILE | yq ".targets[\"$1\"]" -o json -I0 -r
 }
 
 function get_default_property() {
-    cat $PIPELINE_FILE | yq ".defaults[\"$1\"]" -r
+    cat $PIPELINE_FILE | yq ".defaults[\"$1\"]" -o json -I0 -r
 }
 
 function get_package_name() {
@@ -73,7 +74,7 @@ function get_package_name() {
 }
 
 function get_target_project() {
-    cat $PIPELINE_FILE | yq ".targets[\"$1\"] | .fleet.project" -r
+    cat $PIPELINE_FILE | yq ".targets[\"$1\"] | .fleet.project" -o json -I0 -r
 }
 
 function start_rollout() {
@@ -91,9 +92,9 @@ function start_rollout() {
 
     if [ $? -eq 0 ]; then
         # Trigger new rollout
-        gcloud alpha container fleet packages update $PACKAGE_NAME \
+        "gcloud alpha container fleet packages update $PACKAGE_NAME \
             --source="$ROLLOUT_CONFIG" \
-            --project=$PROJECT
+            --project=$PROJECT"
     else
         # First deployment of package
         gcloud alpha container fleet packages create $PACKAGE_NAME \
